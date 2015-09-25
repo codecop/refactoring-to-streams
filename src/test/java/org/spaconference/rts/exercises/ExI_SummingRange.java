@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.spaconference.rts.runner.ExampleRunner;
 
 import java.util.function.LongUnaryOperator;
+import java.util.stream.LongStream;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -21,6 +22,33 @@ public class ExI_SummingRange {
             result += i;
         }
         return result;
+    }
+
+    // @Way
+    public static long step1_sequence(long limit) {
+        long result = 0;
+        // TODO does not finish for MAX_LONG
+        for (long i : (Iterable<Long>) LongStream.range(0, limit)::iterator) {
+            result += i;
+        }
+        return result;
+    }
+
+    // @Way
+    public static long step2_forEach(long limit) {
+        final long[] result = {0};
+        LongStream.range(0, limit).forEach(i -> result[0] += i);
+        return result[0];
+    }
+
+    @Way
+    public static long step3_sum(long limit) {
+        return LongStream.range(0, limit).sum();
+    }
+
+    @Way
+    public static long step4_parallel(long limit) {
+        return LongStream.range(0, limit).parallel().sum();
     }
 
     @Test
