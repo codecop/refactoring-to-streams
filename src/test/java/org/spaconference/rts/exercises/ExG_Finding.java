@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.spaconference.rts.runner.ExampleRunner;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
@@ -25,6 +26,37 @@ public class ExG_Finding {
                 return string;
         }
         return null;
+    }
+
+    @Way
+    public static String step1_iterateStream(List<String> strings, Predicate<? super String> criteria) {
+        for (String string : (Iterable<String>) strings.stream()::iterator) {
+            if (criteria.test(string))
+                return string;
+        }
+        return null;
+    }
+
+    @Way
+    public static String step2_filter(List<String> strings, Predicate<? super String> criteria) {
+        for (String string : (Iterable<String>) strings.stream().filter(criteria)::iterator) {
+            return string;
+        }
+        return null;
+    }
+
+    @Way
+    public static String step3_findFirst(List<String> strings, Predicate<? super String> criteria) {
+        Optional<String> first = strings.stream().filter(criteria).findFirst();
+        if (first.isPresent()) {
+            return first.get();
+        }
+        return null;
+    }
+
+    @Way
+    public static String step4_inline(List<String> strings, Predicate<? super String> criteria) {
+        return strings.stream().filter(criteria).findFirst().orElse(null);
     }
 
     @Test
