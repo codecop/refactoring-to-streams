@@ -49,7 +49,7 @@ public class ExB_Iterating {
     @Way
     public static void stream_step_2(Iterable<String> things, PrintWriter writer) throws IOException {
         Stream<String> stream = StreamSupport.stream(things.spliterator(), false);
-        stream.forEach(thing ->writer.write(thing));
+        stream.forEach(thing -> writer.write(thing));
     }
 
     @Way
