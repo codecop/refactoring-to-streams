@@ -25,6 +25,16 @@ public class ExB_Iterating {
         }
     }
 
+    @Way
+    public static void forEachLambda(Iterable<String> things, PrintWriter writer) throws IOException {
+        things.forEach(thing -> writer.write(thing));
+    }
+
+    @Way
+    public static void forEachMethodHandle(Iterable<String> things, PrintWriter writer) throws IOException {
+        things.forEach(writer::write);
+    }
+
     @Test
     public void test(Thing f) {
         Writer writer = new StringWriter();
