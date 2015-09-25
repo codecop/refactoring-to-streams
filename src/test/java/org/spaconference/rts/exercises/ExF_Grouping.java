@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -60,6 +61,28 @@ public class ExF_Grouping {
         }
 
         return categories;
+    }
+
+    @Way
+    public static Map<String, List<Product>> step1_forEach(List<Product> products) {
+        SortedMap<String, List<Product>> categories = new TreeMap<>();
+
+        products.stream().forEach(p -> {
+            if (categories.containsKey(p.category)) {
+                categories.get(p.category).add(p);
+            } else {
+                List<Product> categoryProducts = new ArrayList<>();
+                categoryProducts.add(p);
+                categories.put(p.category, categoryProducts);
+            }
+        });
+
+        return categories;
+    }
+
+    @Way
+    public static Map<String, List<Product>> step2_collect(List<Product> products) {
+        return products.stream().collect(Collectors.groupingBy(p -> p.category));
     }
 
     @Test
