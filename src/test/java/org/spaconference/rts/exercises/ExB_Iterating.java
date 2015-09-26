@@ -38,7 +38,7 @@ public class ExB_Iterating {
     }
 
     @Way
-    public static void stream_step_1(Iterable<String> things, PrintWriter writer) throws IOException {
+    public static void step1_introducingStream(Iterable<String> things, PrintWriter writer) throws IOException {
         Stream<String> stream = StreamSupport.stream(things.spliterator(), false);
         Iterable<String> iterable = stream::iterator;
         for (String thing : iterable) {
@@ -47,13 +47,13 @@ public class ExB_Iterating {
     }
 
     @Way
-    public static void stream_step_2(Iterable<String> things, PrintWriter writer) throws IOException {
+    public static void step2_forEachStream(Iterable<String> things, PrintWriter writer) throws IOException {
         Stream<String> stream = StreamSupport.stream(things.spliterator(), false);
         stream.forEach(thing -> writer.write(thing));
     }
 
     @Way
-    public static void stream_step_3(Iterable<String> things, PrintWriter writer) throws IOException {
+    public static void step3_MethodReference(Iterable<String> things, PrintWriter writer) throws IOException {
         StreamSupport.stream(things.spliterator(), false).forEach(writer::write);
     }
 

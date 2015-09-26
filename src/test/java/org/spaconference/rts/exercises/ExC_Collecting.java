@@ -29,19 +29,19 @@ public class ExC_Collecting {
     }
 
     @Way
-    public static List<String> step1_iterate(Iterable<String> things) {
+    public static List<String> step1_forEachList(Iterable<String> things) {
         List<String> result = new ArrayList<>();
         StreamSupport.stream(things.spliterator(), false).forEach(result::add);
         return result;
     }
 
     @Way
-    public static List<String> step2_collect(Iterable<String> things) {
+    public static List<String> step2_collectIntoNewLisr(Iterable<String> things) {
         return StreamSupport.stream(things.spliterator(), false).collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Way
-    public static List<String> step2_collect_toList(Iterable<String> things) {
+    public static List<String> step3_collectorToList(Iterable<String> things) {
         return StreamSupport.stream(things.spliterator(), false).collect(Collectors.toList());
     }
 

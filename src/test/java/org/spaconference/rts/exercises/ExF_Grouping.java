@@ -81,7 +81,7 @@ public class ExF_Grouping {
     }
 
     @Way
-    public static Map<String, List<Product>> step2_collect(List<Product> products) {
+    public static Map<String, List<Product>> step2_collectGrouping(List<Product> products) {
         return products.stream().collect(Collectors.groupingBy(p -> p.category));
     }
 

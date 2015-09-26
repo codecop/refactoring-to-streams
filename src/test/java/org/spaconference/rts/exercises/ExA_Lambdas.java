@@ -16,7 +16,7 @@ import static org.spaconference.rts.runner.ExampleRunner.Way;
 public class ExA_Lambdas {
 
     @Way
-    public static Function<String, Integer> oldWayAnonymousClass() {
+    public static Function<String, Integer> oldWay() {
         return new Function<String, Integer>() {
             @Override
             public Integer apply(String s) {
@@ -26,12 +26,12 @@ public class ExA_Lambdas {
     }
 
     @Way
-    public static Function<String, Integer> lambda() {
+    public static Function<String, Integer> step1_LambdaExpression() {
         return s -> Integer.parseInt(s);
     }
 
     @Way
-    public static Function<String, Integer> methodReference() {
+    public static Function<String, Integer> step2_MethodReference() {
         return Integer::parseInt;
     }
 
