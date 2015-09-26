@@ -9,6 +9,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -25,6 +27,136 @@ public class ExK_AbortOnException {
             uris.add(new URL(string));
         }
         return uris;
+    }
+
+    @Way
+    public static List<URL> step1_iterateStream(List<String> strings) throws MalformedURLException {
+        List<URL> uris = new ArrayList<>();
+        try {
+            strings.stream().forEach(string -> {
+                try {
+                    uris.add(new URL(string));
+                } catch (MalformedURLException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        } catch (RuntimeException e) {
+            throw (MalformedURLException) e.getCause();
+        }
+        return uris;
+    }
+
+    @Way
+    public static List<URL> step2_collect(List<String> strings) throws MalformedURLException {
+        try {
+            return strings.stream().map(string -> {
+                try {
+                    return new URL(string);
+                } catch (MalformedURLException e) {
+                    throw new RuntimeException(e);
+                }
+            }).collect(Collectors.toList());
+        } catch (RuntimeException e) {
+            throw (MalformedURLException) e.getCause();
+        }
+    }
+
+    @Way
+    public static List<URL> step3_privateException(List<String> strings) throws MalformedURLException {
+        class MalformedURLRuntimeException extends RuntimeException {
+
+            public MalformedURLRuntimeException(MalformedURLException e) {
+                super(e);
+            }
+
+            @Override
+            public MalformedURLException getCause() {
+                return (MalformedURLException) super.getCause();
+            }
+        }
+        try {
+            return strings.stream().map(string -> {
+                try {
+                    return new URL(string);
+                } catch (MalformedURLException e) {
+                    throw new MalformedURLRuntimeException(e);
+                }
+            }).collect(Collectors.toList());
+        } catch (MalformedURLRuntimeException e) {
+            throw e.getCause();
+        }
+    }
+
+//    @Way
+//    public static List<URL> alternative_useLibrary(List<String> strings) throws MalformedURLException {
+//        // see http://stackoverflow.com/questions/18198176/java-8-lambda-function-that-throws-exception/30246026#30246026
+//        return strings.stream().
+//                map(Errors.rethrow().wrap((Throwing.Function<String, URL>) URL::new)).
+//                collect(Collectors.toList());
+//    }
+
+    @Way
+    public static List<URL> alternative1_throwAsUnchecked(List<String> strings) throws MalformedURLException {
+        return strings.stream().map(string -> {
+            try {
+                return new URL(string);
+            } catch (MalformedURLException e) {
+                throwAsUnchecked(e);
+                throw new AssertionError("unreachable");
+            }
+        }).collect(Collectors.toList());
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <E extends Throwable> void throwAsUnchecked(Exception exception) throws E {
+        throw (E) exception;
+    }
+
+    @Way
+    public static List<URL> alternative2_wrapper(List<String> strings) throws MalformedURLException {
+        return strings.stream().
+                map(wrapAndRethrowAsUnchecked(URL::new)).
+                collect(Collectors.toList());
+    }
+
+    @FunctionalInterface
+    public interface NewUrl {
+        URL apply(String value) throws MalformedURLException;
+    }
+
+    private static Function<String, URL> wrapAndRethrowAsUnchecked(NewUrl factory) {
+        return string -> {
+            try {
+                return factory.apply(string);
+            } catch (MalformedURLException e) {
+                throwAsUnchecked(e);
+                throw new AssertionError("unreachable");
+            }
+        };
+    }
+
+    @Way
+    public static List<URL> alternative3_FunctionalInterfaceWithDefault(List<String> strings) throws MalformedURLException {
+        // see http://stackoverflow.com/a/27252163/104143
+        return strings.stream().
+                map((ThrowingFunction<String, URL>) URL::new).
+                collect(Collectors.toList());
+    }
+
+    @FunctionalInterface
+    public interface ThrowingFunction<T, R> extends Function<T, R> {
+
+        @Override
+        default R apply(T t) {
+            try {
+                return applyThrows(t);
+            } catch (final Exception e) {
+                throwAsUnchecked(e);
+                throw new AssertionError("unreachable");
+            }
+        }
+
+        R applyThrows(T t) throws Exception;
     }
 
     @Test
@@ -50,7 +182,6 @@ public class ExK_AbortOnException {
 
         f.apply(bad_uris);
     }
-
 
     @FunctionalInterface
     public interface UrlParser {
