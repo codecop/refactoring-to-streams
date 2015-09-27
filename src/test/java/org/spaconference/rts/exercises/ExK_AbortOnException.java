@@ -30,7 +30,16 @@ public class ExK_AbortOnException {
     }
 
     @Way
-    public static List<URL> step1_iterateStream(List<String> strings) throws MalformedURLException {
+    public static List<URL> step1_introduceStream(List<String> strings) throws MalformedURLException {
+        List<URL> uris = new ArrayList<>();
+        for (String string : (Iterable<String>) strings.stream()::iterator) {
+            uris.add(new URL(string));
+        }
+        return uris;
+    }
+
+    @Way
+    public static List<URL> step2_forEachWithRethrow(List<String> strings) throws MalformedURLException {
         List<URL> uris = new ArrayList<>();
         try {
             strings.stream().forEach(string -> {
@@ -47,7 +56,7 @@ public class ExK_AbortOnException {
     }
 
     @Way
-    public static List<URL> step2_collect(List<String> strings) throws MalformedURLException {
+    public static List<URL> step3_collect(List<String> strings) throws MalformedURLException {
         try {
             return strings.stream().map(string -> {
                 try {
@@ -62,7 +71,7 @@ public class ExK_AbortOnException {
     }
 
     @Way
-    public static List<URL> step3_privateException(List<String> strings) throws MalformedURLException {
+    public static List<URL> step4_privateException(List<String> strings) throws MalformedURLException {
         class MalformedURLRuntimeException extends RuntimeException {
 
             public MalformedURLRuntimeException(MalformedURLException e) {
@@ -96,7 +105,7 @@ public class ExK_AbortOnException {
 //    }
 
     @Way
-    public static List<URL> alternative1_throwAsUnchecked(List<String> strings) throws MalformedURLException {
+    public static List<URL> alternative4_throwAsUnchecked(List<String> strings) throws MalformedURLException {
         return strings.stream().map(string -> {
             try {
                 return new URL(string);
@@ -113,7 +122,7 @@ public class ExK_AbortOnException {
     }
 
     @Way
-    public static List<URL> alternative2_wrapper(List<String> strings) throws MalformedURLException {
+    public static List<URL> alternative5_wrapForThrowAsUnchecked(List<String> strings) throws MalformedURLException {
         return strings.stream().
                 map(wrapAndRethrowAsUnchecked(URL::new)).
                 collect(Collectors.toList());
@@ -136,7 +145,7 @@ public class ExK_AbortOnException {
     }
 
     @Way
-    public static List<URL> alternative3_FunctionalInterfaceWithDefault(List<String> strings) throws MalformedURLException {
+    public static List<URL> alternative6_FunctionalInterfaceWithDefault(List<String> strings) throws MalformedURLException {
         // see http://stackoverflow.com/a/27252163/104143
         return strings.stream().
                 map((ThrowingFunction<String, URL>) URL::new).

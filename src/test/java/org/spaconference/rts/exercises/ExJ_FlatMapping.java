@@ -32,7 +32,18 @@ public class ExJ_FlatMapping {
     }
 
     @Way
-    public static List<Integer> step1_intStream(int max) {
+    public static List<Integer> step1_introduceStream(int max) {
+        List<Integer> ints = new ArrayList<>();
+        for (Integer i : (Iterable<Integer>) IntStream.rangeClosed(1, max)::iterator) {
+            for (int j = 1; j <= i; j++) {
+                ints.add(j);
+            }
+        }
+        return ints;
+    }
+
+    @Way
+    public static List<Integer> step2_forEach(int max) {
         List<Integer> ints = new ArrayList<>();
         IntStream.rangeClosed(1, max).forEach(i -> {
             for (int j = 1; j <= i; j++) {
@@ -43,7 +54,18 @@ public class ExJ_FlatMapping {
     }
 
     @Way
-    public static List<Integer> step2_intStream2(int max) {
+    public static List<Integer> step3_introduceStream2(int max) {
+        List<Integer> ints = new ArrayList<>();
+        IntStream.rangeClosed(1, max).forEach(i -> {
+            for (Integer j : (Iterable<Integer>) IntStream.rangeClosed(1, i)::iterator) {
+                ints.add(j);
+            }
+        });
+        return ints;
+    }
+
+    @Way
+    public static List<Integer> step4_forEach2(int max) {
         List<Integer> ints = new ArrayList<>();
         IntStream.rangeClosed(1, max).forEach(i -> {
             IntStream.rangeClosed(1, i).forEach(j -> ints.add(j));
@@ -52,7 +74,7 @@ public class ExJ_FlatMapping {
     }
 
     @Way
-    public static List<Integer> step3_boxedCollect(int max) {
+    public static List<Integer> step5_boxedCollect(int max) {
         List<Integer> ints = new ArrayList<>();
         IntStream.rangeClosed(1, max).forEach(i -> {
             List<Integer> sublist = IntStream.rangeClosed(1, i).boxed().collect(Collectors.toList());
@@ -62,7 +84,7 @@ public class ExJ_FlatMapping {
     }
 
     @Way
-    public static List<Integer> step4_flatMap(int max) {
+    public static List<Integer> step6_flatMap(int max) {
         return IntStream.rangeClosed(1, max).
                 flatMap(i -> IntStream.rangeClosed(1, i)).
                 boxed().
@@ -70,7 +92,7 @@ public class ExJ_FlatMapping {
     }
 
     @Way
-    public static List<Integer> step5_MethodReference(int max) {
+    public static List<Integer> step7_MethodReference(int max) {
         return oneTo(max).
                 flatMap(ExJ_FlatMapping::oneTo).
                 boxed().

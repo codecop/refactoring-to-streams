@@ -30,30 +30,40 @@ public class ExE_Filtering {
     }
 
     @Way
-    public static List<Integer> step1_forEach(List<Integer> xs) {
+    public static List<Integer> step1_introduceStream(List<Integer> xs) {
         List<Integer> result = new ArrayList<>();
-        xs.forEach(x -> {
+        for (int x : (Iterable<Integer>) xs.stream()::iterator) {
             if (x % 2 == 0) {
                 result.add(x);
             }
-        });
+        }
         return result;
     }
 
     @Way
     public static List<Integer> step2_filter(List<Integer> xs) {
         List<Integer> result = new ArrayList<>();
+        Iterable<Integer> iterable = (Iterable<Integer>) xs.stream().filter(x -> x % 2 == 0)::iterator;
+        for (int x : iterable) {
+            result.add(x);
+        }
+        return result;
+    }
+
+    @Way
+    public static List<Integer> step3_forEach(List<Integer> xs) {
+        List<Integer> result = new ArrayList<>();
         xs.stream().filter(x -> x % 2 == 0).forEach(x -> result.add(x));
         return result;
     }
 
     @Way
-    public static List<Integer> step3_collect(List<Integer> xs) {
+    public static List<Integer> step4_collect(List<Integer> xs) {
         return xs.stream().filter(x -> x % 2 == 0).collect(Collectors.toList());
     }
 
     @Way
-    public static List<Integer> step4_MethodReference(List<Integer> xs) {
+    public static List<Integer> step5_MethodReference(List<Integer> xs) {
         return xs.stream().filter(ExE_Filtering::even).collect(Collectors.toList());
     }
 

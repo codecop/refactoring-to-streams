@@ -29,19 +29,28 @@ public class ExC_Collecting {
     }
 
     @Way
-    public static List<String> step1_forEachList(Iterable<String> things) {
+    public static List<String> step1_introduceStream(Iterable<String> things) {
+        List<String> result = new ArrayList<>();
+        for (String thing : (Iterable<String>) StreamSupport.stream(things.spliterator(), false)::iterator) {
+            result.add(thing);
+        }
+        return result;
+    }
+
+    @Way
+    public static List<String> step2_forEach(Iterable<String> things) {
         List<String> result = new ArrayList<>();
         StreamSupport.stream(things.spliterator(), false).forEach(result::add);
         return result;
     }
 
     @Way
-    public static List<String> step2_collectIntoNewLisr(Iterable<String> things) {
+    public static List<String> step3_collectIntoNewList(Iterable<String> things) {
         return StreamSupport.stream(things.spliterator(), false).collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Way
-    public static List<String> step3_collectorToList(Iterable<String> things) {
+    public static List<String> step4_collectorToList(Iterable<String> things) {
         return StreamSupport.stream(things.spliterator(), false).collect(Collectors.toList());
     }
 
