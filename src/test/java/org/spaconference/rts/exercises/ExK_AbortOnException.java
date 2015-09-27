@@ -56,7 +56,7 @@ public class ExK_AbortOnException {
     }
 
     @Way
-    public static List<URL> step3_collect(List<String> strings) throws MalformedURLException {
+    public static List<URL> step3_mapCollect(List<String> strings) throws MalformedURLException {
         try {
             return strings.stream().map(string -> {
                 try {
