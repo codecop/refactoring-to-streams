@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.function.IntFunction;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static java.lang.Math.floor;
@@ -42,6 +43,49 @@ public class ExX_Grouping2 {
         }
 
         return multiples;
+    }
+
+    @Way
+    public static Map<Integer, List<Integer>> step1_introduceStream(int max) {
+        SortedMap<Integer, List<Integer>> multiples = new TreeMap<>();
+
+        for (Integer i : (Iterable<Integer>) IntStream.range(2, max)::iterator) {
+            int divisor = smallestDivisor(i);
+
+            if (multiples.containsKey(divisor)) {
+                multiples.get(divisor).add(i);
+            } else {
+                List<Integer> group = new ArrayList<>();
+                group.add(i);
+                multiples.put(divisor, group);
+            }
+        }
+
+        return multiples;
+    }
+
+    @Way
+    public static Map<Integer, List<Integer>> step2_forEach(int max) {
+        SortedMap<Integer, List<Integer>> multiples = new TreeMap<>();
+
+        IntStream.range(2, max).forEach(i -> {
+            int divisor = smallestDivisor(i);
+
+            if (multiples.containsKey(divisor)) {
+                multiples.get(divisor).add(i);
+            } else {
+                List<Integer> group = new ArrayList<>();
+                group.add(i);
+                multiples.put(divisor, group);
+            }
+        });
+
+        return multiples;
+    }
+
+    @Way
+    public static Map<Integer, List<Integer>> step3_groupBy(int max) {
+        return IntStream.range(2, max).boxed().collect(Collectors.groupingBy(ExX_Grouping2::smallestDivisor));
     }
 
     @Test
