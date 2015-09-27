@@ -6,12 +6,17 @@ import org.junit.runner.RunWith;
 import org.spaconference.rts.runner.ExampleRunner;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
@@ -64,7 +69,24 @@ public class ExF_Grouping {
     }
 
     @Way
-    public static Map<String, List<Product>> step1_forEach(List<Product> products) {
+    public static Map<String, List<Product>> step1_introduceStream(List<Product> products) {
+        SortedMap<String, List<Product>> categories = new TreeMap<>();
+
+        for (Product p : (Iterable<Product>) products.stream()::iterator) {
+            if (categories.containsKey(p.category)) {
+                categories.get(p.category).add(p);
+            } else {
+                List<Product> categoryProducts = new ArrayList<>();
+                categoryProducts.add(p);
+                categories.put(p.category, categoryProducts);
+            }
+        }
+
+        return categories;
+    }
+
+    @Way
+    public static Map<String, List<Product>> step2_forEach(List<Product> products) {
         SortedMap<String, List<Product>> categories = new TreeMap<>();
 
         products.stream().forEach(p -> {
@@ -81,7 +103,49 @@ public class ExF_Grouping {
     }
 
     @Way
-    public static Map<String, List<Product>> step2_collectGrouping(List<Product> products) {
+    public static Map<String, List<Product>> step3_collect(List<Product> products) {
+        SortedMap<String, List<Product>> categories = new TreeMap<>();
+
+        products.stream().collect(new Collector<Product, SortedMap<String, List<Product>>, SortedMap<String, List<Product>>>() {
+            @Override
+            public Supplier<SortedMap<String, List<Product>>> supplier() {
+                return () -> categories;
+            }
+
+            @Override
+            public BiConsumer<SortedMap<String, List<Product>>, Product> accumulator() {
+                return (categories, p) -> {
+                    if (categories.containsKey(p.category)) {
+                        categories.get(p.category).add(p);
+                    } else {
+                        List<Product> categoryProducts = new ArrayList<>();
+                        categoryProducts.add(p);
+                        categories.put(p.category, categoryProducts);
+                    }
+                };
+            }
+
+            @Override
+            public BinaryOperator<SortedMap<String, List<Product>>> combiner() {
+                // not parallel
+                return (a, b) -> a;
+            }
+
+            @Override
+            public Function<SortedMap<String, List<Product>>, SortedMap<String, List<Product>>> finisher() {
+                return Function.identity();
+            }
+
+            @Override
+            public Set<Characteristics> characteristics() {
+                return EnumSet.noneOf(Characteristics.class);
+            }
+        });
+        return categories;
+    }
+
+    @Way
+    public static Map<String, List<Product>> step4_groupBy(List<Product> products) {
         return products.stream().collect(Collectors.groupingBy(p -> p.category));
     }
 
