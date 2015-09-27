@@ -29,7 +29,7 @@ public class ExG_Finding {
     }
 
     @Way
-    public static String step1_iterateStream(List<String> strings, Predicate<? super String> criteria) {
+    public static String step1_introduceStream(List<String> strings, Predicate<? super String> criteria) {
         for (String string : (Iterable<String>) strings.stream()::iterator) {
             if (criteria.test(string))
                 return string;

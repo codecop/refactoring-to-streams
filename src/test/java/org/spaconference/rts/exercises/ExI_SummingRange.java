@@ -25,7 +25,7 @@ public class ExI_SummingRange {
     }
 
     // @Way
-    public static long step1_iterateStreanRange(long limit) {
+    public static long step1_introduceStream(long limit) {
         long result = 0;
         // TODO does not finish for MAX_LONG
         for (long i : (Iterable<Long>) LongStream.range(0, limit)::iterator) {

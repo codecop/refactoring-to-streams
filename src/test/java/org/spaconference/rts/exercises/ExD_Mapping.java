@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static java.util.Arrays.asList;
@@ -30,9 +29,8 @@ public class ExD_Mapping {
     }
 
     @Way
-    public static List<Integer> step1_iterateStream(List<String> strings) {
-        Stream<String> stream = StreamSupport.stream(strings.spliterator(), false);
-        Iterable<String> iterable = stream::iterator;
+    public static List<Integer> step1_introduceStream(List<String> strings) {
+        Iterable<String> iterable = StreamSupport.stream(strings.spliterator(), false)::iterator;
         List<Integer> result = new ArrayList<>();
         for (String string : iterable) {
             result.add(Integer.parseInt(string));
@@ -41,10 +39,9 @@ public class ExD_Mapping {
     }
 
     @Way
-    public static List<Integer> step2_mapStream(List<String> strings) {
-        Stream<Integer> stream = StreamSupport.stream(strings.spliterator(), false).
-                                               map(string -> Integer.parseInt(string));
-        Iterable<Integer> iterable = stream::iterator;
+    public static List<Integer> step2_map(List<String> strings) {
+        Iterable<Integer> iterable = StreamSupport.stream(strings.spliterator(), false).
+                map(string -> Integer.parseInt(string))::iterator;
         List<Integer> result = new ArrayList<>();
         for (Integer i : iterable) {
             result.add(i);
@@ -53,7 +50,7 @@ public class ExD_Mapping {
     }
 
     @Way
-    public static List<Integer> step3_mapCollect(List<String> strings) {
+    public static List<Integer> step3_collect(List<String> strings) {
         return StreamSupport.stream(strings.spliterator(), false).
                 map(Integer::parseInt).
                 collect(Collectors.toList());
