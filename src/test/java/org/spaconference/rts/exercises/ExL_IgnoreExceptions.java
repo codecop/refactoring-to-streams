@@ -9,6 +9,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -28,6 +32,88 @@ public class ExL_IgnoreExceptions {
             }
         }
         return uris;
+    }
+
+    @Way
+    public static List<URL> step1_introduceStream(List<String> strings) {
+        List<URL> uris = new ArrayList<>();
+        for (String string : (Iterable<String>) strings.stream()::iterator) {
+            try {
+                uris.add(new URL(string));
+            } catch (MalformedURLException ignored) {
+            }
+        }
+        return uris;
+    }
+
+    @Way
+    public static List<URL> step2_forEach(List<String> strings) {
+        List<URL> uris = new ArrayList<>();
+        strings.stream().forEach(string -> {
+            try {
+                uris.add(new URL(string));
+            } catch (MalformedURLException ignored) {
+            }
+        });
+        return uris;
+    }
+
+    @Way
+    public static List<URL> step3_mapCollectNull(List<String> strings) {
+        return strings.stream().map(string -> {
+            try {
+                return new URL(string);
+            } catch (MalformedURLException ignored) {
+                return null;
+            }
+        }).filter(u -> u != null).collect(Collectors.toList());
+    }
+
+    @Way
+    public static List<URL> step3a_mapCollectOptional(List<String> strings) {
+        return strings.stream().
+                map(string -> {
+                    try {
+                        return Optional.of(new URL(string));
+                    } catch (MalformedURLException ignored) {
+                        return Optional.<URL>empty();
+                    }
+                }).filter(Optional::isPresent).
+                map(Optional::get).
+                collect(Collectors.toList());
+    }
+
+    @Way
+    public static List<URL> step4_flatMapCollect(List<String> strings) {
+        return strings.stream().flatMap(string -> {
+            try {
+                return Stream.of(new URL(string));
+            } catch (MalformedURLException ignored) {
+                return Stream.empty();
+            }
+        }).collect(Collectors.toList());
+    }
+
+    @Way
+    public static List<URL> step5_wrapIgnoreException(List<String> strings) {
+        return strings.stream().flatMap(ignoreExceptions(URL::new)).collect(Collectors.toList());
+    }
+
+    private static <T, R> Function<T, Stream<R>> ignoreExceptions(FailingFunction<T, R> factory) {
+        return t -> {
+            try {
+                return Stream.of(factory.apply(t));
+            } catch (RuntimeException e) {
+                throw e;
+            } catch (Exception ignored) {
+                return Stream.empty();
+            }
+        };
+    }
+
+    @FunctionalInterface
+    public interface FailingFunction<T, R> {
+        R apply(T t) throws Exception;
     }
 
     @Test
