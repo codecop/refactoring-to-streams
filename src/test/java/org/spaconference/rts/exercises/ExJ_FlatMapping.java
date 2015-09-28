@@ -92,7 +92,7 @@ public class ExJ_FlatMapping {
     }
 
     @Way
-    public static List<Integer> step7_MethodReference(int max) {
+    public static List<Integer> step7_flatMapMethodReference(int max) {
         return oneTo(max).
                 flatMap(ExJ_FlatMapping::oneTo).
                 boxed().

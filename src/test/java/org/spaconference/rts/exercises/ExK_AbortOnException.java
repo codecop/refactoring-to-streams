@@ -145,7 +145,7 @@ public class ExK_AbortOnException {
     }
 
     @Way
-    public static List<URL> alternative6_FunctionalInterfaceWithDefault(List<String> strings) throws MalformedURLException {
+    public static List<URL> alternative6_castToFunctionalInterfaceWithDefaultRethrowAsUnchecked(List<String> strings) throws MalformedURLException {
         // see http://stackoverflow.com/a/27252163/104143
         return strings.stream().
                 map((ThrowingFunction<String, URL>) URL::new).

@@ -63,7 +63,7 @@ public class ExE_Filtering {
     }
 
     @Way
-    public static List<Integer> step5_MethodReference(List<Integer> xs) {
+    public static List<Integer> step5_filterMethodReference(List<Integer> xs) {
         return xs.stream().filter(ExE_Filtering::even).collect(Collectors.toList());
     }
 

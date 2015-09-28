@@ -103,7 +103,7 @@ public class ExF_Grouping {
     }
 
     @Way
-    public static Map<String, List<Product>> step3_collect(List<Product> products) {
+    public static Map<String, List<Product>> step3_customCollector(List<Product> products) {
         SortedMap<String, List<Product>> categories = new TreeMap<>();
 
         products.stream().collect(new Collector<Product, SortedMap<String, List<Product>>, SortedMap<String, List<Product>>>() {

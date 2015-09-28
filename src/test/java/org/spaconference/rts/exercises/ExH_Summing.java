@@ -46,7 +46,7 @@ public class ExH_Summing {
     }
 
     @Way
-    public static int step4_MethodReference(int[] ints) {
+    public static int step4_reduceMethodReference(int[] ints) {
         return IntStream.of(ints).reduce(0, ExH_Summing::sum);
     }
 

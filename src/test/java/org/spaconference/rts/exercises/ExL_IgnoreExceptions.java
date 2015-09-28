@@ -59,18 +59,21 @@ public class ExL_IgnoreExceptions {
     }
 
     @Way
-    public static List<URL> step3_mapCollectNull(List<String> strings) {
-        return strings.stream().map(string -> {
-            try {
-                return new URL(string);
-            } catch (MalformedURLException ignored) {
-                return null;
-            }
-        }).filter(u -> u != null).collect(Collectors.toList());
+    public static List<URL> step3a_mapCollectNull(List<String> strings) {
+        return strings.stream().
+                map(string -> {
+                    try {
+                        return new URL(string);
+                    } catch (MalformedURLException ignored) {
+                        return null;
+                    }
+                }).
+                filter(u -> u != null).
+                collect(Collectors.toList());
     }
 
     @Way
-    public static List<URL> step3a_mapCollectOptional(List<String> strings) {
+    public static List<URL> step3b_mapCollectOptional(List<String> strings) {
         return strings.stream().
                 map(string -> {
                     try {
@@ -84,7 +87,7 @@ public class ExL_IgnoreExceptions {
     }
 
     @Way
-    public static List<URL> step4_flatMapCollect(List<String> strings) {
+    public static List<URL> step3c_flatMapCollect(List<String> strings) {
         return strings.stream().flatMap(string -> {
             try {
                 return Stream.of(new URL(string));
@@ -95,7 +98,7 @@ public class ExL_IgnoreExceptions {
     }
 
     @Way
-    public static List<URL> step5_wrapIgnoreException(List<String> strings) {
+    public static List<URL> step4_wrapIgnoreException(List<String> strings) {
         return strings.stream().flatMap(ignoreExceptions(URL::new)).collect(Collectors.toList());
     }
 
