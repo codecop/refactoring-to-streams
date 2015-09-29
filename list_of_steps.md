@@ -2,7 +2,7 @@ Steps
 =====
 This is the list of refactoring steps for the facilitator.
 
- for /F "usebackq" %a in (`dir /b *.java`) do findstr /i step %a
+    for /F "usebackq" %a in (`dir /b *.java`) do findstr /i step %a
 
 ExA_Lambdas
 -----------
@@ -44,6 +44,7 @@ ExF_Grouping
 * step2_forEach
 * step3_customCollector
 * step4_groupBy
+* step5_MethodReference
 
 ExG_Finding
 -----------
@@ -58,15 +59,16 @@ ExH_Summing
 * step2_forEach
 * step3_reduce
 * step4_reduceMethodReference
-* step5_sum
+* step5_reduceMethodReferenceInteger
+* step6_sum
 
 ExI_SummingRange
 ----------------
 * step1_introduceStream
 * step2_forEach
-* step?_reduce
-* step3_sum
-* step4_parallelSum
+* step3_reduce
+* step4_sum
+* step5_parallelSum
 
 ExJ_FlatMapping
 ---------------
@@ -82,9 +84,11 @@ ExK_AbortOnException
 --------------------
 * step1_introduceStream
 * step2_forEachWithRethrow
-* step?_map
-* step3_mapCollect
+* step?_mapWithRethrow
+* step3_mapWithRethrowCollect
 * step4_privateException
+* step5_MethodReference
+* step6_wrappedPrivateException
 
 Alternative
 * step4_throwAsUnchecked
