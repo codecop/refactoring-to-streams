@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
@@ -56,7 +57,7 @@ public class ExK_AbortOnException {
     }
 
     @Way
-    public static List<URL> step3_mapCollect(List<String> strings) throws MalformedURLException {
+    public static List<URL> step3_mapWithRethrowCollect(List<String> strings) throws MalformedURLException {
         try {
             return strings.stream().map(string -> {
                 try {
@@ -96,6 +97,67 @@ public class ExK_AbortOnException {
         }
     }
 
+    private static class StreamFailedException extends RuntimeException {
+        public StreamFailedException(Exception e) {
+            super(e);
+        }
+    }
+
+    @Way
+    public static List<URL> step5_MethodReference(List<String> strings) throws MalformedURLException {
+        try {
+            return strings.stream().map(ExK_AbortOnException::newUrl).collect(Collectors.toList());
+        } catch (StreamFailedException e) {
+            throw (MalformedURLException) e.getCause();
+        }
+    }
+
+    private static URL newUrl(String string) {
+        try {
+            return new URL(string);
+        } catch (MalformedURLException e) {
+            throw new StreamFailedException(e);
+        }
+    }
+
+    @Way
+    public static List<URL> step6_wrappedPrivateException(List<String> strings) throws MalformedURLException {
+        return Failing.<List<URL>, MalformedURLException>rethrow(() -> {
+            return strings.
+                    stream().
+                    map(Failing.<String, URL>wrap(URL::new)).
+                    collect(Collectors.toList());
+        });
+    }
+
+    static class Failing {
+
+        @FunctionalInterface
+        public interface Fun<T, R> {
+            R apply(T t) throws Exception;
+        }
+
+        public static <T, R> Function<T, R> wrap(Fun<T, R> fun) {
+            return string -> {
+                try {
+                    return fun.apply(string);
+                } catch (Exception e) {
+                    throw new StreamFailedException(e);
+                }
+            };
+        }
+
+        public static <T, E extends Exception> T rethrow(Supplier<T> s) throws E {
+            try {
+                return s.get();
+            } catch (StreamFailedException e) {
+                throw (E) e.getCause();
+            }
+        }
+    }
+
+    // ----- alternatives with more magic - throwAsUnchecked (sneaky throws) -----
+
 //    @Way
 //    public static List<URL> alternative_useLibrary(List<String> strings) throws MalformedURLException {
 //        // see http://stackoverflow.com/questions/18198176/java-8-lambda-function-that-throws-exception/30246026#30246026
@@ -133,7 +195,8 @@ public class ExK_AbortOnException {
         URL apply(String value) throws MalformedURLException;
     }
 
-    private static Function<String, URL> wrapAndRethrowAsUnchecked(NewUrl factory) {
+    private static Function<String, URL> wrapAndRethrowAsUnchecked(NewUrl factory) throws MalformedURLException {
+        // trick: throws MalformedURLException because the sneaky pipeline will throw it
         return string -> {
             try {
                 return factory.apply(string);
