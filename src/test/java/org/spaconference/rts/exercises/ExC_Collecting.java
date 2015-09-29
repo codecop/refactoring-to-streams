@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static java.util.Arrays.asList;
@@ -31,7 +32,8 @@ public class ExC_Collecting {
     @Way
     public static List<String> step1_introduceStream(Iterable<String> things) {
         List<String> result = new ArrayList<>();
-        for (String thing : (Iterable<String>) StreamSupport.stream(things.spliterator(), false)::iterator) {
+        Stream<String> stream = StreamSupport.stream(things.spliterator(), false);
+        for (String thing : (Iterable<String>) stream::iterator) {
             result.add(thing);
         }
         return result;

@@ -39,8 +39,8 @@ public class ExB_Iterating {
 
     @Way
     public static void step1_introduceStream(Iterable<String> things, PrintWriter writer) throws IOException {
-        Iterable<String> iterable = StreamSupport.stream(things.spliterator(), false)::iterator;
-        for (String thing : iterable) {
+        Stream<String> stream = StreamSupport.stream(things.spliterator(), false);
+        for (String thing : (Iterable<String>) stream::iterator) {
             writer.write(thing);
         }
     }

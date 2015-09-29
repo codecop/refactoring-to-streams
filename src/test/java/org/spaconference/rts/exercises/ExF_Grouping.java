@@ -18,6 +18,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -35,6 +36,10 @@ public class ExF_Grouping {
         public Product(String name, String category) {
             this.name = name;
             this.category = category;
+        }
+
+        public String category() {
+            return category;
         }
 
         @Override
@@ -72,7 +77,8 @@ public class ExF_Grouping {
     public static Map<String, List<Product>> step1_introduceStream(List<Product> products) {
         SortedMap<String, List<Product>> categories = new TreeMap<>();
 
-        for (Product p : (Iterable<Product>) products.stream()::iterator) {
+        Stream<Product> stream = products.stream();
+        for (Product p : (Iterable<Product>) stream::iterator) {
             if (categories.containsKey(p.category)) {
                 categories.get(p.category).add(p);
             } else {
@@ -109,6 +115,7 @@ public class ExF_Grouping {
         products.stream().collect(new Collector<Product, SortedMap<String, List<Product>>, SortedMap<String, List<Product>>>() {
             @Override
             public Supplier<SortedMap<String, List<Product>>> supplier() {
+                // allways return the same map, so we do not need to combine, ignore all concurrency issues
                 return () -> categories;
             }
 
@@ -147,6 +154,11 @@ public class ExF_Grouping {
     @Way
     public static Map<String, List<Product>> step4_groupBy(List<Product> products) {
         return products.stream().collect(Collectors.groupingBy(p -> p.category));
+    }
+
+    @Way
+    public static Map<String, List<Product>> step5_MethodReference(List<Product> products) {
+        return products.stream().collect(Collectors.groupingBy(Product::category));
     }
 
     @Test

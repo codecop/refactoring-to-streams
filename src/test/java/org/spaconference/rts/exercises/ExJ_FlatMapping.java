@@ -34,7 +34,9 @@ public class ExJ_FlatMapping {
     @Way
     public static List<Integer> step1_introduceStream(int max) {
         List<Integer> ints = new ArrayList<>();
-        for (Integer i : (Iterable<Integer>) IntStream.rangeClosed(1, max)::iterator) {
+        IntStream stream = IntStream.iterate(1, i -> i + 1).limit(Math.max(0, max));
+        // IntStream stream = IntStream.rangeClosed(1, max);
+        for (Integer i : (Iterable<Integer>) stream::iterator) {
             for (int j = 1; j <= i; j++) {
                 ints.add(j);
             }
@@ -57,7 +59,8 @@ public class ExJ_FlatMapping {
     public static List<Integer> step3_introduceStream2(int max) {
         List<Integer> ints = new ArrayList<>();
         IntStream.rangeClosed(1, max).forEach(i -> {
-            for (Integer j : (Iterable<Integer>) IntStream.rangeClosed(1, i)::iterator) {
+            IntStream stream = IntStream.rangeClosed(1, i);
+            for (Integer j : (Iterable<Integer>) stream::iterator) {
                 ints.add(j);
             }
         });
@@ -93,14 +96,16 @@ public class ExJ_FlatMapping {
 
     @Way
     public static List<Integer> step7_flatMapMethodReference(int max) {
-        return oneTo(max).
-                flatMap(ExJ_FlatMapping::oneTo).
+        return One.upTo(max).
+                flatMap(One::upTo).
                 boxed().
                 collect(Collectors.toList());
     }
 
-    private static IntStream oneTo(int max) {
-        return IntStream.rangeClosed(1, max);
+    private static class One {
+        private static IntStream upTo(int max) {
+            return IntStream.rangeClosed(1, max);
+        }
     }
 
     @Test

@@ -27,7 +27,8 @@ public class ExH_Summing {
     @Way
     public static int step1_introduceStream(int[] ints) {
         int result = 0;
-        for (int i : (Iterable<Integer>) IntStream.of(ints)::iterator) {
+        IntStream stream = IntStream.of(ints);
+        for (int i : (Iterable<Integer>) stream::iterator) {
             result += i;
         }
         return result;
@@ -47,15 +48,22 @@ public class ExH_Summing {
 
     @Way
     public static int step4_reduceMethodReference(int[] ints) {
-        return IntStream.of(ints).reduce(0, ExH_Summing::sum);
+        return IntStream.of(ints).reduce(0, Math::sum);
     }
 
-    private static int sum(int a, int b) {
-        return a + b;
+    private static class Math {
+        private static int sum(int a, int b) {
+            return a + b;
+        }
     }
 
     @Way
-    public static int step5_sum(int[] ints) {
+    public static int step5_reduceMethodReferenceInteger(int[] ints) {
+        return IntStream.of(ints).reduce(0, Integer::sum);
+    }
+
+    @Way
+    public static int step6_sum(int[] ints) {
         return IntStream.of(ints).sum();
     }
 

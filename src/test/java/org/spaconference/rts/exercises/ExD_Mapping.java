@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -30,9 +30,9 @@ public class ExD_Mapping {
 
     @Way
     public static List<Integer> step1_introduceStream(List<String> strings) {
-        Iterable<String> iterable = StreamSupport.stream(strings.spliterator(), false)::iterator;
         List<Integer> result = new ArrayList<>();
-        for (String string : iterable) {
+        Stream<String> stream = strings.stream();
+        for (String string : (Iterable<String>) stream::iterator) {
             result.add(Integer.parseInt(string));
         }
         return result;
@@ -40,10 +40,9 @@ public class ExD_Mapping {
 
     @Way
     public static List<Integer> step2_map(List<String> strings) {
-        Iterable<Integer> iterable = StreamSupport.stream(strings.spliterator(), false).
-                map(string -> Integer.parseInt(string))::iterator;
         List<Integer> result = new ArrayList<>();
-        for (Integer i : iterable) {
+        Stream<Integer> stream = strings.stream().map(string -> Integer.parseInt(string));
+        for (Integer i : (Iterable<Integer>) stream::iterator) {
             result.add(i);
         }
         return result;
@@ -51,7 +50,7 @@ public class ExD_Mapping {
 
     @Way
     public static List<Integer> step3_collect(List<String> strings) {
-        return StreamSupport.stream(strings.spliterator(), false).
+        return strings.stream().
                 map(Integer::parseInt).
                 collect(Collectors.toList());
     }

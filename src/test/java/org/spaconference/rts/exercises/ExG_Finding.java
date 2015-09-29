@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -30,7 +31,8 @@ public class ExG_Finding {
 
     @Way
     public static String step1_introduceStream(List<String> strings, Predicate<? super String> criteria) {
-        for (String string : (Iterable<String>) strings.stream()::iterator) {
+        Stream<String> stream = strings.stream();
+        for (String string : (Iterable<String>) stream::iterator) {
             if (criteria.test(string))
                 return string;
         }
@@ -39,7 +41,8 @@ public class ExG_Finding {
 
     @Way
     public static String step2_filter(List<String> strings, Predicate<? super String> criteria) {
-        for (String string : (Iterable<String>) strings.stream().filter(criteria)::iterator) {
+        Stream<String> stream = strings.stream().filter(criteria);
+        for (String string : (Iterable<String>) stream::iterator) {
             return string;
         }
         return null;

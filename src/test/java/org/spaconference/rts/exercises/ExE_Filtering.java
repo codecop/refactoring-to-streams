@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -32,7 +33,8 @@ public class ExE_Filtering {
     @Way
     public static List<Integer> step1_introduceStream(List<Integer> xs) {
         List<Integer> result = new ArrayList<>();
-        for (int x : (Iterable<Integer>) xs.stream()::iterator) {
+        Stream<Integer> stream = xs.stream();
+        for (int x : (Iterable<Integer>) stream::iterator) {
             if (x % 2 == 0) {
                 result.add(x);
             }
@@ -43,8 +45,8 @@ public class ExE_Filtering {
     @Way
     public static List<Integer> step2_filter(List<Integer> xs) {
         List<Integer> result = new ArrayList<>();
-        Iterable<Integer> iterable = (Iterable<Integer>) xs.stream().filter(x -> x % 2 == 0)::iterator;
-        for (int x : iterable) {
+        Stream<Integer> stream = xs.stream().filter(x -> x % 2 == 0);
+        for (int x : (Iterable<Integer>) stream::iterator) {
             result.add(x);
         }
         return result;
@@ -64,11 +66,13 @@ public class ExE_Filtering {
 
     @Way
     public static List<Integer> step5_filterMethodReference(List<Integer> xs) {
-        return xs.stream().filter(ExE_Filtering::even).collect(Collectors.toList());
+        return xs.stream().filter(NumberIs::even).collect(Collectors.toList());
     }
 
-    private static boolean even(Integer x) {
-        return x % 2 == 0;
+    private static class NumberIs {
+        private static boolean even(Integer x) {
+            return x % 2 == 0;
+        }
     }
 
     @Test

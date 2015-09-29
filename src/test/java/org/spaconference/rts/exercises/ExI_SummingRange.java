@@ -24,17 +24,17 @@ public class ExI_SummingRange {
         return result;
     }
 
-    // @Way
+    @Way
     public static long step1_introduceStream(long limit) {
         long result = 0;
-        // TODO does not finish for MAX_LONG
-        for (long i : (Iterable<Long>) LongStream.range(0, limit)::iterator) {
+        LongStream stream = LongStream.range(0, limit);
+        for (long i : (Iterable<Long>) stream::iterator) {
             result += i;
         }
         return result;
     }
 
-    // @Way
+    @Way
     public static long step2_forEach(long limit) {
         final long[] result = {0};
         LongStream.range(0, limit).forEach(i -> result[0] += i);
@@ -42,12 +42,17 @@ public class ExI_SummingRange {
     }
 
     @Way
-    public static long step3_sum(long limit) {
+    public static long step3_reduce(long limit) {
+        return LongStream.range(0, limit).reduce(0, Long::sum);
+    }
+
+    @Way
+    public static long step4_sum(long limit) {
         return LongStream.range(0, limit).sum();
     }
 
     @Way
-    public static long step4_parallelSum(long limit) {
+    public static long step5_parallelSum(long limit) {
         return LongStream.range(0, limit).parallel().sum();
     }
 
