@@ -110,13 +110,13 @@ public class ExF_Grouping {
 
     @Way
     public static Map<String, List<Product>> step3_customCollector(List<Product> products) {
-        SortedMap<String, List<Product>> categories = new TreeMap<>();
+        SortedMap<String, List<Product>> result = new TreeMap<>();
 
         products.stream().collect(new Collector<Product, SortedMap<String, List<Product>>, SortedMap<String, List<Product>>>() {
             @Override
             public Supplier<SortedMap<String, List<Product>>> supplier() {
                 // allways return the same map, so we do not need to combine, ignore all concurrency issues
-                return () -> categories;
+                return () -> result;
             }
 
             @Override
@@ -148,7 +148,7 @@ public class ExF_Grouping {
                 return EnumSet.noneOf(Characteristics.class);
             }
         });
-        return categories;
+        return result;
     }
 
     @Way
