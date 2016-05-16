@@ -80,7 +80,7 @@ The final exercise is to refactor the `ExampleRunner` itself - our solution of t
 
 ### License
 
-(Cc Attribution Sharealike](http://creativecommons.org/licenses/by-sa/4.0/)
+[CC Attribution-ShareAlike](http://creativecommons.org/licenses/by-sa/4.0/)
 
-Please do run use this material to run the session yourself - let us know how it goes. If you want Duncan and Nat
+Please do use this material to run the session yourself - let us know how it went. If you want Duncan and Nat
 to come in and run it for you, we should talk!
