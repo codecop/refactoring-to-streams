@@ -13,5 +13,9 @@ Convert back to an iterable:
 
 Create a collector:
 
- * static factory method defined in Collectors. 
- 
+ * static factory method defined in Collectors.
+
+Group a stream into a map:
+
+ * static factory method defined in Collectors.
+

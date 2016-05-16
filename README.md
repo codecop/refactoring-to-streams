@@ -77,6 +77,7 @@ The final exercise is to refactor the `ExampleRunner` itself - our solution of t
 * It helped to get an overview of what is available in Java 8 regarding streams and lambda expressions.
 * We got a first understanding of streams, but we need more practice.
 * Streams and lambda expressions are complicated (when you are new to it).
+* Searching for the proper API to use can be frustrating. Especially collecting and grouping was hard to find.
 
 ### License
 
