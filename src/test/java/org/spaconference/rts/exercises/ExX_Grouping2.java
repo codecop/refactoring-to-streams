@@ -85,7 +85,9 @@ public class ExX_Grouping2 {
 
     @Way
     public static Map<Integer, List<Integer>> step3_groupBy(int max) {
-        return IntStream.range(2, max).boxed().collect(Collectors.groupingBy(ExX_Grouping2::smallestDivisor));
+        return IntStream.range(2, max).
+                boxed().
+                collect(Collectors.groupingBy(ExX_Grouping2::smallestDivisor));
     }
 
     @Test

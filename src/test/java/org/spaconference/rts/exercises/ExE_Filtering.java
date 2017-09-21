@@ -61,12 +61,16 @@ public class ExE_Filtering {
 
     @Way
     public static List<Integer> step4_collect(List<Integer> xs) {
-        return xs.stream().filter(x -> x % 2 == 0).collect(Collectors.toList());
+        return xs.stream().
+                filter(x -> x % 2 == 0).
+                collect(Collectors.toList());
     }
 
     @Way
     public static List<Integer> step5_filterMethodReference(List<Integer> xs) {
-        return xs.stream().filter(NumberIs::even).collect(Collectors.toList());
+        return xs.stream().
+                filter(NumberIs::even).
+                collect(Collectors.toList());
     }
 
     private static class NumberIs {

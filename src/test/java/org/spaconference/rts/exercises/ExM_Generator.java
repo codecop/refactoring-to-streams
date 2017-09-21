@@ -37,7 +37,10 @@ public class ExM_Generator {
 
     @Way
     public static List<Integer> newWay(int count) {
-        return IntStream.generate(fibonacciSupplier(1, 2)).limit(count).boxed().collect(toList());
+        return IntStream.generate(fibonacciSupplier(1, 2)).
+                limit(count).
+                boxed().
+                collect(toList());
     }
 
     public static IntSupplier fibonacciSupplier(int initial1, int initial2) {

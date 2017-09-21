@@ -115,7 +115,7 @@ public class ExF_Grouping {
         products.stream().collect(new Collector<Product, SortedMap<String, List<Product>>, SortedMap<String, List<Product>>>() {
             @Override
             public Supplier<SortedMap<String, List<Product>>> supplier() {
-                // allways return the same map, so we do not need to combine, ignore all concurrency issues
+                // always return the same map, so we do not need to combine, ignore all concurrency issues
                 return () -> result;
             }
 
@@ -153,12 +153,14 @@ public class ExF_Grouping {
 
     @Way
     public static Map<String, List<Product>> step4_groupBy(List<Product> products) {
-        return products.stream().collect(Collectors.groupingBy(p -> p.category));
+        return products.stream().
+                collect(Collectors.groupingBy(p -> p.category));
     }
 
     @Way
     public static Map<String, List<Product>> step5_MethodReference(List<Product> products) {
-        return products.stream().collect(Collectors.groupingBy(Product::category));
+        return products.stream().
+                collect(Collectors.groupingBy(Product::category));
     }
 
     @Test

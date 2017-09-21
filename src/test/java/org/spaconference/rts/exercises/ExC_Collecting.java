@@ -48,12 +48,14 @@ public class ExC_Collecting {
 
     @Way
     public static List<String> step3_collectIntoNewList(Iterable<String> things) {
-        return StreamSupport.stream(things.spliterator(), false).collect(Collectors.toCollection(ArrayList::new));
+        return StreamSupport.stream(things.spliterator(), false).
+                collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Way
     public static List<String> step4_collectorToList(Iterable<String> things) {
-        return StreamSupport.stream(things.spliterator(), false).collect(Collectors.toList());
+        return StreamSupport.stream(things.spliterator(), false).
+                collect(Collectors.toList());
     }
 
     @Test

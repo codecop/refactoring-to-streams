@@ -59,7 +59,9 @@ public class ExG_Finding {
 
     @Way
     public static String step4_orElseNull(List<String> strings, Predicate<? super String> criteria) {
-        return strings.stream().filter(criteria).findFirst().orElse(null);
+        return strings.stream().
+                filter(criteria).
+                findFirst().orElse(null);
     }
 
     @Test

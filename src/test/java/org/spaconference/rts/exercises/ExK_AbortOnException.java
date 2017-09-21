@@ -106,7 +106,9 @@ public class ExK_AbortOnException {
     @Way
     public static List<URL> step5_MethodReference(List<String> strings) throws MalformedURLException {
         try {
-            return strings.stream().map(ExK_AbortOnException::newUrl).collect(Collectors.toList());
+            return strings.stream().
+                    map(ExK_AbortOnException::newUrl).
+                    collect(Collectors.toList());
         } catch (StreamFailedException e) {
             throw (MalformedURLException) e.getCause();
         }
@@ -123,8 +125,7 @@ public class ExK_AbortOnException {
     @Way
     public static List<URL> step6_wrappedPrivateException(List<String> strings) throws MalformedURLException {
         return Failing.<List<URL>, MalformedURLException>rethrow(() -> {
-            return strings.
-                    stream().
+            return strings.stream().
                     map(Failing.<String, URL>wrap(URL::new)).
                     collect(Collectors.toList());
         });

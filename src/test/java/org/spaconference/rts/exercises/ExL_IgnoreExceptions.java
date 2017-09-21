@@ -81,25 +81,30 @@ public class ExL_IgnoreExceptions {
                     } catch (MalformedURLException ignored) {
                         return Optional.<URL>empty();
                     }
-                }).filter(Optional::isPresent).
+                }).
+                filter(Optional::isPresent).
                 map(Optional::get).
                 collect(Collectors.toList());
     }
 
     @Way
     public static List<URL> step3c_flatMapCollect(List<String> strings) {
-        return strings.stream().flatMap(string -> {
-            try {
-                return Stream.of(new URL(string));
-            } catch (MalformedURLException ignored) {
-                return Stream.empty();
-            }
-        }).collect(Collectors.toList());
+        return strings.stream().
+                flatMap(string -> {
+                    try {
+                        return Stream.of(new URL(string));
+                    } catch (MalformedURLException ignored) {
+                        return Stream.empty();
+                    }
+                }).
+                collect(Collectors.toList());
     }
 
     @Way
     public static List<URL> step4_wrapIgnoreException(List<String> strings) {
-        return strings.stream().flatMap(ignoreExceptions(URL::new)).collect(Collectors.toList());
+        return strings.stream().
+                flatMap(ignoreExceptions(URL::new)).
+                collect(Collectors.toList());
     }
 
     private static <T, R> Function<T, Stream<R>> ignoreExceptions(FailingFunction<T, R> factory) {
