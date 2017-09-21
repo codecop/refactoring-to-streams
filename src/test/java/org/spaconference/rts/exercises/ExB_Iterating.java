@@ -4,7 +4,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.spaconference.rts.runner.ExampleRunner;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -21,24 +20,24 @@ import static org.spaconference.rts.runner.ExampleRunner.Way;
 public class ExB_Iterating {
 
     @Way
-    public static void oldWay(Iterable<String> things, PrintWriter writer) throws IOException {
+    public static void oldWay(Iterable<String> things, PrintWriter writer) {
         for (String thing : things) {
             writer.write(thing);
         }
     }
 
     @Way
-    public static void forEachLambda(Iterable<String> things, PrintWriter writer) throws IOException {
+    public static void forEachLambda(Iterable<String> things, PrintWriter writer) {
         things.forEach(thing -> writer.write(thing));
     }
 
     @Way
-    public static void forEachMethodHandle(Iterable<String> things, PrintWriter writer) throws IOException {
+    public static void forEachMethodHandle(Iterable<String> things, PrintWriter writer) {
         things.forEach(writer::write);
     }
 
     @Way
-    public static void step1_introduceStream(Iterable<String> things, PrintWriter writer) throws IOException {
+    public static void step1_introduceStream(Iterable<String> things, PrintWriter writer) {
         Stream<String> stream = StreamSupport.stream(things.spliterator(), false);
         for (String thing : (Iterable<String>) stream::iterator) {
             writer.write(thing);
@@ -46,13 +45,13 @@ public class ExB_Iterating {
     }
 
     @Way
-    public static void step2_forEach(Iterable<String> things, PrintWriter writer) throws IOException {
+    public static void step2_forEach(Iterable<String> things, PrintWriter writer) {
         Stream<String> stream = StreamSupport.stream(things.spliterator(), false);
         stream.forEach(thing -> writer.write(thing));
     }
 
     @Way
-    public static void step3_MethodReference(Iterable<String> things, PrintWriter writer) throws IOException {
+    public static void step3_MethodReference(Iterable<String> things, PrintWriter writer) {
         StreamSupport.stream(things.spliterator(), false).forEach(writer::write);
     }
 
